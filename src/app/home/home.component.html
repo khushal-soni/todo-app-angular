@@ -1,0 +1,92 @@
+<div class="hero"></div>
+
+<div class="app">
+  <header>
+    <div class="header">
+      <h2 class="header-title">TODO'S</h2>
+
+      <button class="btn-theme-toggle" (click)="toggleTheme()">
+        <img src="../../assets/icon-moon.svg" alt="theme_changer" class="header__button--icon"
+          id="btn-theme-toggle-icon">
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="todo-form-container">
+      <form class="todo-form">
+        <input type="text" placeholder="Create a new todo..." class="todo-input" id="todo-form__input">
+        <button type="submit" class="btn-todo-submit">Add</button>
+      </form>
+    </div>
+
+    <div class="todo-list-container">
+      <div class="todo-items">
+        <!-- Hidden template for a single todo item -->
+        <ng-container *ngIf="filteredTodos.length; else noTodoFound">
+          <ng-container *ngFor="let todo of filteredTodos">
+            <div class="todo-item">
+              <!-- Check Box -->
+              <div [ngClass]="todo.status === TODO_STATUS[1] ? 'todo-item__check todo-item__checked-div' : 'todo-item__check'">
+                <span class="todo-item__check-img"
+                  [ngClass]="todo.status === TODO_STATUS[1] ? 'todo-item__check-img todo-item__checked-span' : 'todo-item__check-img'"></span>
+                <input type="checkbox" class="todo-item__checkbox" [checked]="todo.status === 'complete'"
+                  (change)="onCheckboxChange(todo, $event)">
+              </div>
+
+              <!-- Text -->
+              <p class="todo-item__text" [ngClass]="todo.status === TODO_STATUS[1] ? 'todo-item__text todo-text__completed' : 'todo-item__text'">{{todo.text}}</p>
+
+              <!-- Delete Button -->
+              <button class="todo-item__delete-btn" (click)="deleteTodo(todo, $event)">
+                <img src="../../assets/icon-cross.svg" alt="Delete Todo" width="20px" height="20px">
+              </button>
+            </div>
+          </ng-container>
+
+        </ng-container>
+
+        <ng-template #noTodoFound id="no-todo-template">
+          <div class="todo-item">
+            <p class="todo-item__text">No Todos Found</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- CLEAR BTN -->
+      <ng-container id="todo-clear-template">
+        <div class="todo-clear">
+          <button class="btn-clear-todo" (click)="clearAllTodos()">
+            Clear All Tasks
+          </button>
+
+          <!-- <button class="btn-clear-completed" (click)="clearCompletedTodos()">
+                            Clear Completed Todo
+                        </button> -->
+        </div>
+      </ng-container>
+
+      <ng-container id="todo-actions">
+        <div class="todo-actions-container">
+          <!-- <span class="todo-status btn-clear-todo">1 of 5 Pending</span>
+
+          <div class="todo-filter-container">
+            <button class="btn-clear-todo" (click)="">All</button>
+            <button class="btn-clear-todo" (click)="">Completed</button>
+            <button class="btn-clear-todo" (click)="">Pending</button>
+          </div> -->
+
+          <button class="btn-clear-todo">Clear Completed</button>
+        </div>
+      </ng-container>
+    </div>
+
+    <ng-container id="filter-mobile">
+      <div class="filter-container-mobile">
+        <button class="todo-filter-button" (click)='showAllTodo()'>All</button>
+        <button class="todo-filter-button" (click)='showCompletedTodo()'>Completed</button>
+        <button class="todo-filter-button" (click)='showPendingTodo()'>Pending</button>
+      </div>
+    </ng-container>
+  </main>
+</div>

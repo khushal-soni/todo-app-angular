@@ -1,0 +1,253 @@
+.hero {
+    width: 100%;
+    height: 15rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.app {
+    width: 90%;
+    max-width: 33.75rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -9.7rem;
+}
+
+/* -------------------------
+* DARK THEME
+-------------------------- */
+.hero-light {
+    background-image: url(../../assets/bg-desktop-light.jpg);
+}
+
+.hero-dark {
+    background-image: url(../../assets/bg-desktop-dark.jpg);
+}
+
+/* -------------------------
+* HEADER
+-------------------------- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.65rem;
+}
+
+.header-title {
+    width: 100%;
+    color: white;
+    font-size: 1.8rem;
+    letter-spacing: 12px;
+}
+
+.btn-theme-toggle {
+    background-color: transparent;
+    border: none;
+}
+
+/* -------------------------
+* TODO FORM
+-------------------------- */
+.todo-form {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.todo-input,
+.btn-todo-submit {
+    padding: 0.875rem;
+    font-size: 0.875rem;
+    border: none;
+    margin: 0;
+    width: 100%;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: var(--todo-background);
+    color: var(--color-primary);
+}
+
+.todo-input {
+    flex: 1;
+    border-radius: 6px 0 0 6px;
+}
+
+.todo-input:focus {
+    outline: none;
+}
+
+.btn-todo-submit {
+    flex: 0.1;
+    border-radius: 0 6px 6px 0;
+    background-image: linear-gradient(
+        to right,
+        var(--linear-gradient-blue),
+        var(--linear-gradient-purple)
+    );
+    color: var(--background-primary);
+}
+
+/* -------------------------
+* TODO ITEMS
+-------------------------- */
+.todo-list-container {
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.todo-item,
+.todo-clear {
+    /* background-color: white; */
+    background-color: var(--todo-background);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.todo-item:not(:last-child) {
+    border-bottom: 1px solid var(--todo-separator);
+}
+
+.todo-clear {
+    border-top: 1px solid var(--todo-separator);
+}
+
+.todo-actions-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    border-top: 1px solid var(--todo-separator);
+    background-color: var(--todo-background);
+}
+
+.todo-filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-container-mobile {
+    background-color: var(--todo-background);
+    border-radius: 6px;
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.todo-filter-button {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #777a92;
+}
+
+.todo-filter-button-active {
+    color: #3d79ed;
+}
+
+/* Styles for desktop (screens wider than 500px) */
+@media (min-width: 521px) {
+    .filter-container-mobile {
+        display: none; /* Hide the mobile filter container on desktop */
+    }
+}
+
+/* Styles for mobile (screens up to 500px wide) */
+@media (max-width: 520px) {
+    .todo-filter-container {
+        display: none; /* Hide the desktop filter container on mobile */
+    }
+
+    .filter-container-mobile {
+        margin-top: 20px; /* Add margin on mobile */
+    }
+}
+
+.todo-item__check,
+.todo-item__text,
+.todo-item__delete-btn {
+    width: 100%;
+}
+
+.todo-item__check {
+    margin-right: 0.7rem;
+    border: 1px solid #777a92;
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+}
+
+.todo-item__check-img {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.todo-item__checkbox {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    outline: none;
+    cursor: pointer;
+}
+
+.todo-item__text {
+    flex: 3;
+}
+
+.todo-item__delete-btn {
+    flex: 0.2;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* *Clear Todos */
+.btn-clear-todo {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-size: .875rem;
+    font-weight: normal;
+    color: #777a92;
+}
+
+/* For JS */
+.todo-item__checked-div {
+    background: linear-gradient(90deg, #57ddff 0%, #c058f3 100%);
+    border: none;
+}
+
+.todo-item__checked-span {
+    background-image: url(../../assets/icon-check.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.todo-text__completed {
+    text-decoration: line-through;
+    color: var(--grey-text);
+}
+
+/* -------------------------
+* MEDIA QUERIES
+-------------------------- */
+
+@media screen and (max-width: 500px) {
+    .hero-light {
+        background-image: url(../../assets/bg-mobile-light.jpg);
+    }
+    .hero-dark {
+        background-image: url(../../assets/bg-mobile-dark.jpg);
+    }
+}
