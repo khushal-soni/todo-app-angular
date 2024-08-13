@@ -66,28 +66,28 @@ export class HomeComponent implements OnInit {
       this.heroImg?.classList?.remove('hero-dark');
       this.heroImg?.classList?.add('hero-light');
 
-      this.themeToggleIcon.src = '../../assets/icon-moon.svg';
+      this.themeToggleIcon.src = 'assets/icon-moon.svg';
     } else {
       this.htmlElement.setAttribute('data-theme', 'dark');
       this.heroImg?.classList?.remove('hero-light');
       this.heroImg?.classList?.add('hero-dark');
 
     }
-    this.themeToggleIcon.src = '../../assets/icon-sun.svg';
+    this.themeToggleIcon.src = 'assets/icon-sun.svg';
   }
 
   setLightTheme(): void {
     document.documentElement.removeAttribute('data-theme');
     this.heroImg.classList.remove('hero-dark');
     this.heroImg.classList.add('hero-light');
-    this.updateThemeToggleIcon('../../assets/icon-moon.svg');
+    this.updateThemeToggleIcon('assets/icon-moon.svg');
   }
 
   setDarkTheme(): void {
     document.documentElement.setAttribute('data-theme', 'dark');
     this.heroImg.classList.remove('hero-light');
     this.heroImg.classList.add('hero-dark');
-    this.updateThemeToggleIcon('../../assets/icon-sun.svg');
+    this.updateThemeToggleIcon('assets/icon-sun.svg');
   }
 
   updateThemeToggleIcon(src: string): void {
@@ -105,14 +105,14 @@ export class HomeComponent implements OnInit {
       this.heroImg.classList.remove('hero-light');
       this.heroImg.classList.add('hero-dark');
 
-      this.themeToggleIcon.src = '../../assets/icon-moon.svg';
+      this.themeToggleIcon.src = 'assets/icon-moon.svg';
       localStorage.setItem('theme', this.THEMES[1]);
     } else {
       this.htmlElement.removeAttribute('data-theme');
       this.heroImg.classList.remove('hero-dark');
       this.heroImg.classList.add('hero-light');
 
-      this.themeToggleIcon.src = '../../assets/icon-sun.svg';
+      this.themeToggleIcon.src = 'assets/icon-sun.svg';
       localStorage.setItem('theme', this.THEMES[0]);
     }
   }
