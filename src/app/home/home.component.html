@@ -14,8 +14,8 @@
 
   <main class="main">
     <div class="todo-form-container">
-      <form class="todo-form">
-        <input type="text" placeholder="Create a new todo..." class="todo-input" id="todo-form__input">
+      <form class="todo-form" [formGroup]="addTodoForm" (ngSubmit)="addTodo()">
+        <input type="text" placeholder="Create a new todo..." class="todo-input" id="todo-form__input" formControlName="text">
         <button type="submit" class="btn-todo-submit">Add</button>
       </form>
     </div>
@@ -54,38 +54,54 @@
       </div>
 
       <!-- CLEAR BTN -->
-      <ng-container id="todo-clear-template">
+      <!-- <ng-container id="todo-clear-template">
         <div class="todo-clear">
           <button class="btn-clear-todo" (click)="clearAllTodos()">
             Clear All Tasks
           </button>
 
-          <!-- <button class="btn-clear-completed" (click)="clearCompletedTodos()">
-                            Clear Completed Todo
-                        </button> -->
+          <button class="btn-clear-completed" (click)="clearCompletedTodos()">
+              Clear Completed Todo
+          </button>
         </div>
-      </ng-container>
+      </ng-container> -->
 
       <ng-container id="todo-actions">
         <div class="todo-actions-container">
-          <!-- <span class="todo-status btn-clear-todo">1 of 5 Pending</span>
+          <span class="todo-status btn-clear-todo">{{filteredTodos.length}} {{filteredTodos.length === 1 ? 'Todo' : 'Todos'}}</span>
 
           <div class="todo-filter-container">
-            <button class="btn-clear-todo" (click)="">All</button>
-            <button class="btn-clear-todo" (click)="">Completed</button>
-            <button class="btn-clear-todo" (click)="">Pending</button>
-          </div> -->
+            <button class="todo-filter-button" (click)="filterTodos('all')">
+              All
+            </button>
+    
+            <button class="todo-filter-button" (click)="filterTodos('complete')">
+              Completed
+            </button>
+    
+            <button class="todo-filter-button" (click)="filterTodos('pending')">
+              Pending
+            </button>
+          </div>
 
-          <button class="btn-clear-todo">Clear Completed</button>
+          <button class="btn-clear-todo" (click)="clearCompletedTodos()">Clear Completed</button>
         </div>
       </ng-container>
     </div>
 
     <ng-container id="filter-mobile">
       <div class="filter-container-mobile">
-        <button class="todo-filter-button" (click)='showAllTodo()'>All</button>
-        <button class="todo-filter-button" (click)='showCompletedTodo()'>Completed</button>
-        <button class="todo-filter-button" (click)='showPendingTodo()'>Pending</button>
+        <button class="todo-filter-button" (click)="filterTodos('all')">
+          All
+        </button>
+
+        <button class="todo-filter-button" (click)="filterTodos('complete')">
+          Completed
+        </button>
+
+        <button class="todo-filter-button" (click)="filterTodos('pending')">
+          Pending
+        </button>
       </div>
     </ng-container>
   </main>

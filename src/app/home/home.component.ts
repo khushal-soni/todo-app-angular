@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../todo';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
   todoForm!: HTMLFormElement;
   todoItems!: HTMLElement;
   todoListContainer!: HTMLElement;
+  listFilter: string | 'pending' | 'complete' | 'all' = 'all';
 
   todos: Todo[] = [{
     id: '1',
@@ -32,6 +34,12 @@ export class HomeComponent implements OnInit {
   }];
   
   filteredTodos!: Todo[];
+
+  addTodoForm!: FormGroup;
+
+  constructor (private formBuilder: FormBuilder) {
+    this.initForm();
+  }
 
   ngOnInit(): void {
     // * --------------------------------------
@@ -51,12 +59,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadTheme() {
-    const theme = localStorage.getItem('theme');
-
-    if (!theme) {
-      // * Throw an error
-      console.log('no theme by default');
-    }
+    const theme = localStorage.getItem('theme') || this.THEMES[0];
 
     if (theme === this.THEMES[0]) {
       this.htmlElement.removeAttribute('data-theme');
@@ -71,6 +74,27 @@ export class HomeComponent implements OnInit {
 
     }
     this.themeToggleIcon.src = '../../assets/icon-sun.svg';
+  }
+
+  setLightTheme(): void {
+    document.documentElement.removeAttribute('data-theme');
+    this.heroImg.classList.remove('hero-dark');
+    this.heroImg.classList.add('hero-light');
+    this.updateThemeToggleIcon('../../assets/icon-moon.svg');
+  }
+
+  setDarkTheme(): void {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    this.heroImg.classList.remove('hero-light');
+    this.heroImg.classList.add('hero-dark');
+    this.updateThemeToggleIcon('../../assets/icon-sun.svg');
+  }
+
+  updateThemeToggleIcon(src: string): void {
+    const icon = this.themeToggleBtn.firstElementChild as HTMLImageElement;
+    if (icon) {
+      icon.src = src;
+    }
   }
 
   toggleTheme() {
@@ -92,6 +116,34 @@ export class HomeComponent implements OnInit {
       localStorage.setItem('theme', this.THEMES[0]);
     }
   }
+
+  initForm () {
+    this.addTodoForm = this.formBuilder.group({
+      text: '',
+      status: 'pending',
+    });
+  }
+
+  addTodo(): void {
+    const newTodo: Todo = { 
+      id: this.generateId(), 
+      ...this.addTodoForm.value 
+    };
+    this.todos.push(newTodo);
+    this.updateFilteredTodos();
+  }
+
+  updateFilteredTodos(): void {
+    if (this.listFilter === 'all') {
+      this.filteredTodos = this.todos.filter(todo => todo.status !== this.TODO_STATUS[2]);
+    } else {
+      this.filteredTodos = this.todos.filter(todo => todo.status === this.listFilter);
+    }
+  }
+
+  generateId(): string {
+    return 'id' + Math.random().toString(16).slice(2);
+  }
   
   onCheckboxChange(todo: Todo, $event: Event) {
     const todoExists = this.todos.find((t) => t.id === todo.id);
@@ -105,6 +157,8 @@ export class HomeComponent implements OnInit {
     } else {
       todoExists.status = this.TODO_STATUS[0];
     }
+
+    this.updateFilteredTodos();
   }
   
   deleteTodo(todo: Todo, $event: Event) {
@@ -114,23 +168,26 @@ export class HomeComponent implements OnInit {
       todoExists.status = this.TODO_STATUS[2];
     }
 
-    this.filteredTodos = this.todos.filter(todo => todo.status !== this.TODO_STATUS[2]);
-    console.log(this.todos);
+    this.updateFilteredTodos();
   }
 
-  showAllTodo() {
-
+  clearAllTodos(): void {
+    this.todos = [];
+    this.updateFilteredTodos();
   }
 
-  showCompletedTodo() {
-
+  clearCompletedTodos(): void {
+    this.todos = this.todos.filter(todo => todo.status !== this.TODO_STATUS[1]);
+    this.updateFilteredTodos();
   }
 
-  showPendingTodo() {
+  filterTodos(status: string): void {
+    this.listFilter = status;
 
-  }
-
-  clearAllTodos() {
-
+    if (status === 'all') {
+      this.updateFilteredTodos();
+    } else {
+      this.filteredTodos = this.todos.filter(todo => todo.status === status);
+    }
   }
 }
