@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Todo } from '../todo';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastComponent } from '../toast/toast.component';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  @ViewChild(ToastComponent) toast!: ToastComponent;
+
   THEMES: string[] = ['light', 'dark'];
   TODO_STATUS: string[] = ['pending', 'complete', 'deleted'];
   htmlElement!: HTMLElement;
@@ -18,6 +21,7 @@ export class HomeComponent implements OnInit {
   todoItems!: HTMLElement;
   todoListContainer!: HTMLElement;
   listFilter: string | 'pending' | 'complete' | 'all' = 'all';
+  selectedTodo: Todo | null = null;
 
   todos: Todo[] = [{
     id: '1',
@@ -67,33 +71,13 @@ export class HomeComponent implements OnInit {
       this.heroImg?.classList?.add('hero-light');
 
       this.themeToggleIcon.src = 'assets/icon-moon.svg';
+      localStorage.setItem('theme', this.THEMES[0]);
     } else {
       this.htmlElement.setAttribute('data-theme', 'dark');
       this.heroImg?.classList?.remove('hero-light');
       this.heroImg?.classList?.add('hero-dark');
-
-    }
-    this.themeToggleIcon.src = 'assets/icon-sun.svg';
-  }
-
-  setLightTheme(): void {
-    document.documentElement.removeAttribute('data-theme');
-    this.heroImg.classList.remove('hero-dark');
-    this.heroImg.classList.add('hero-light');
-    this.updateThemeToggleIcon('assets/icon-moon.svg');
-  }
-
-  setDarkTheme(): void {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    this.heroImg.classList.remove('hero-light');
-    this.heroImg.classList.add('hero-dark');
-    this.updateThemeToggleIcon('assets/icon-sun.svg');
-  }
-
-  updateThemeToggleIcon(src: string): void {
-    const icon = this.themeToggleBtn.firstElementChild as HTMLImageElement;
-    if (icon) {
-      icon.src = src;
+      localStorage.setItem('theme', this.THEMES[1]);
+      this.themeToggleIcon.src = 'assets/icon-sun.svg';
     }
   }
 
@@ -101,36 +85,54 @@ export class HomeComponent implements OnInit {
     const theme = localStorage.getItem('theme');
 
     if (theme === this.THEMES[0]) {
-      this.htmlElement.setAttribute('data-theme', this.THEMES[1]);
-      this.heroImg.classList.remove('hero-light');
-      this.heroImg.classList.add('hero-dark');
-
-      this.themeToggleIcon.src = 'assets/icon-moon.svg';
-      localStorage.setItem('theme', this.THEMES[1]);
+      this.setDarkTheme();
     } else {
-      this.htmlElement.removeAttribute('data-theme');
-      this.heroImg.classList.remove('hero-dark');
-      this.heroImg.classList.add('hero-light');
+      this.setLightTheme();
+    }
+  }
 
-      this.themeToggleIcon.src = 'assets/icon-sun.svg';
-      localStorage.setItem('theme', this.THEMES[0]);
+  setLightTheme(): void {
+    document.documentElement.removeAttribute('data-theme');
+    this.heroImg.classList.remove('hero-dark');
+    this.heroImg.classList.add('hero-light');
+    this.updateThemeToggleIcon('assets/icon-moon.svg');
+    localStorage.setItem('theme', this.THEMES[0]);
+  }
+
+  setDarkTheme(): void {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    this.heroImg.classList.remove('hero-light');
+    this.heroImg.classList.add('hero-dark');
+    this.updateThemeToggleIcon('assets/icon-sun.svg');
+    localStorage.setItem('theme', this.THEMES[1]);
+  }
+
+  updateThemeToggleIcon(src: string): void {
+    if (this.themeToggleIcon) {
+      this.themeToggleIcon.src = src;
     }
   }
 
   initForm () {
     this.addTodoForm = this.formBuilder.group({
-      text: '',
+      text: ['' , Validators.required],
       status: 'pending',
     });
   }
 
   addTodo(): void {
+    if (this.addTodoForm.invalid) return;
+    
+    if (!this.addTodoForm.get('text')?.value.trim().length) return;
+    
     const newTodo: Todo = { 
       id: this.generateId(), 
       ...this.addTodoForm.value 
     };
     this.todos.push(newTodo);
     this.updateFilteredTodos();
+    console.log(this.toast);
+    this.toast.showToast('Todo added successfully!', 'success');
   }
 
   updateFilteredTodos(): void {
@@ -154,8 +156,10 @@ export class HomeComponent implements OnInit {
 
     if (todo.status === this.TODO_STATUS[0]) {
       todoExists.status = this.TODO_STATUS[1];
+      this.toast.showToast('Todo marked as complete!', 'success');
     } else {
       todoExists.status = this.TODO_STATUS[0];
+      this.toast.showToast('Todo marked as pending!', 'success');
     }
 
     this.updateFilteredTodos();
@@ -166,6 +170,7 @@ export class HomeComponent implements OnInit {
     
     if (todoExists) {
       todoExists.status = this.TODO_STATUS[2];
+      this.toast.showToast('Todo deleted successfully!', 'error');
     }
 
     this.updateFilteredTodos();
@@ -189,5 +194,13 @@ export class HomeComponent implements OnInit {
     } else {
       this.filteredTodos = this.todos.filter(todo => todo.status === status);
     }
+  }
+
+  openTodoModal(todo: Todo) {
+    this.selectedTodo = todo;
+  }
+
+  closeTodoModal() {
+    this.selectedTodo = null;
   }
 }

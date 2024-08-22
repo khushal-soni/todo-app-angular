@@ -57,7 +57,8 @@
 .todo-input,
 .btn-todo-submit {
     padding: 0.875rem;
-    font-size: 0.875rem;
+    // font-size: 0.875rem;
+    font-size: 1rem;
     border: none;
     margin: 0;
     width: 100%;
@@ -203,9 +204,14 @@
 
 .todo-item__text {
     flex: 3;
+    width: 80%;
+    word-break: break-word;
+    cursor: pointer;
 }
 
 .todo-item__delete-btn {
+    margin-left: 5px;
+    width: 10%;
     flex: 0.2;
     background-color: transparent;
     border: none;

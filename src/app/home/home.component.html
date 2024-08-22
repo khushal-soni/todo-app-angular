@@ -35,7 +35,7 @@
               </div>
 
               <!-- Text -->
-              <p class="todo-item__text" [ngClass]="todo.status === TODO_STATUS[1] ? 'todo-item__text todo-text__completed' : 'todo-item__text'">{{todo.text}}</p>
+              <p class="todo-item__text"  (click)="openTodoModal(todo)" [ngClass]="todo.status === TODO_STATUS[1] ? 'todo-item__text todo-text__completed' : 'todo-item__text'">{{todo.text}}</p>
 
               <!-- Delete Button -->
               <button class="todo-item__delete-btn" (click)="deleteTodo(todo, $event)">
@@ -104,5 +104,11 @@
         </button>
       </div>
     </ng-container>
+
+    <!-- Modal -->
+    <app-todo-modal *ngIf="selectedTodo" [todo]="selectedTodo" (close)="closeTodoModal()"></app-todo-modal>
+
+    <!-- Toast -->
+    <app-toast></app-toast>
   </main>
 </div>

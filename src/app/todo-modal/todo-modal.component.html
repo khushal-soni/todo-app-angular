@@ -1,0 +1,8 @@
+<div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-content todo">
+        <h2 class="todo-text">{{ todo.text }}</h2>
+        <p class="todo-status">Status: {{ todo.status }}</p>
+    
+        <button class="btn-todo-submit" (click)="closeModal()">Close</button>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem;
+  border-radius: 6px;
+  // color: var(--todo-text);
+  color: white;
+  border: 1px solid var(--toast-border-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
+  z-index: 1000;
+  transition: opacity 1s ease;
+}
+
+.toast.success {
+  background-color: var(--toast-success-bg);
+}
+
+.toast.error {
+  background-color: var(--toast-error-bg);
+}
+
+/* Optional: Add animation */
+.toast.show {
+  opacity: 1;
+}
+
+.toast.hide {
+  opacity: 0;
+}
