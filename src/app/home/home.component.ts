@@ -131,8 +131,9 @@ export class HomeComponent implements OnInit {
     };
     this.todos.push(newTodo);
     this.updateFilteredTodos();
-    console.log(this.toast);
     this.toast.showToast('Todo added successfully!', 'success');
+
+    this.addTodoForm.reset();
   }
 
   updateFilteredTodos(): void {
