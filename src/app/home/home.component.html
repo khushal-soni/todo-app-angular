@@ -14,7 +14,7 @@
 
   <main class="main">
     <div class="todo-form-container">
-      <form class="todo-form" [formGroup]="addTodoForm" (ngSubmit)="addTodo()">
+      <form class="todo-form" [formGroup]="addTodoForm" (ngSubmit)="addTodoHttp()">
         <input type="text" placeholder="Create a new todo..." class="todo-input" id="todo-form__input" formControlName="text">
         <button type="submit" class="btn-todo-submit">Add</button>
       </form>
@@ -23,8 +23,8 @@
     <div class="todo-list-container">
       <div class="todo-items">
         <!-- Hidden template for a single todo item -->
-        <ng-container *ngIf="filteredTodos.length; else noTodoFound">
-          <ng-container *ngFor="let todo of filteredTodos">
+        <ng-container *ngIf="todos.length; else noTodoFound">
+          <ng-container *ngFor="let todo of todos">
             <div class="todo-item">
               <!-- Check Box -->
               <div [ngClass]="todo.status === TODO_STATUS[1] ? 'todo-item__check todo-item__checked-div' : 'todo-item__check'">
@@ -68,38 +68,40 @@
 
       <ng-container id="todo-actions">
         <div class="todo-actions-container">
-          <span class="todo-status btn-clear-todo">{{filteredTodos.length}} {{filteredTodos.length === 1 ? 'Todo' : 'Todos'}}</span>
+          <span class="todo-status btn-clear-todo">{{todos.length}} {{todos.length === 1 ? 'Todo' : 'Todos'}}</span>
 
           <div class="todo-filter-container">
-            <button class="todo-filter-button" (click)="filterTodos('all')">
+            <button class="todo-filter-button" [ngClass]="listFilter === 'all' ? 'todo-filter-button-active' : ''" (click)="loadTodos('all')">
               All
             </button>
     
-            <button class="todo-filter-button" (click)="filterTodos('complete')">
+            <button class="todo-filter-button" [ngClass]="listFilter === 'complete' ? 'todo-filter-button-active' : ''" (click)="loadTodos('complete')">
               Completed
             </button>
     
-            <button class="todo-filter-button" (click)="filterTodos('pending')">
+            <button class="todo-filter-button" [ngClass]="listFilter === 'pending' ? 'todo-filter-button-active' : ''" (click)="loadTodos('pending')">
               Pending
             </button>
           </div>
 
-          <button class="btn-clear-todo" (click)="clearCompletedTodos()">Clear Completed</button>
+          <ng-container *ngIf="todos.length">  
+            <button class="btn-clear-todo" (click)="clearCompletedTodos()">Clear Completed</button>
+          </ng-container>
         </div>
       </ng-container>
     </div>
 
     <ng-container id="filter-mobile">
       <div class="filter-container-mobile">
-        <button class="todo-filter-button" (click)="filterTodos('all')">
+        <button class="todo-filter-button" [ngClass]="listFilter === 'all' ? 'todo-filter-button-active' : ''" (click)="loadTodos('all')">
           All
         </button>
 
-        <button class="todo-filter-button" (click)="filterTodos('complete')">
+        <button class="todo-filter-button" [ngClass]="listFilter === 'complete' ? 'todo-filter-button-active' : ''" (click)="loadTodos('complete')">
           Completed
         </button>
 
-        <button class="todo-filter-button" (click)="filterTodos('pending')">
+        <button class="todo-filter-button" [ngClass]="listFilter === 'pending' ? 'todo-filter-button-active' : ''" (click)="loadTodos('pending')">
           Pending
         </button>
       </div>
